@@ -2,7 +2,7 @@ services:
   - type: web
     name: askmynotes
     runtime: python
-    buildCommand: pip install --no-cache-dir -r requirements.txt
+    buildCommand: pip install --no-cache-dir --prefer-binary -r requirements.txt
     startCommand: python3 app.py
     envVars:
       - key: GROQ_API_KEY
