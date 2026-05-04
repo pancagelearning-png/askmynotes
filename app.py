@@ -27,7 +27,6 @@ try:
         fn=chat,
         title="AskMyNotes",
         description="Ask questions about your personal notes and PDFs",
-        type="messages",
     )
 
     if __name__ == "__main__":
