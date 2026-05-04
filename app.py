@@ -1,6 +1,9 @@
 import sys
 import os
+import traceback
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+
+print(f"GROQ_API_KEY present: {bool(os.environ.get('GROQ_API_KEY'))}", flush=True)
 
 import gradio as gr
 from chain import answer
@@ -20,9 +23,14 @@ demo = gr.ChatInterface(
 )
 
 if __name__ == "__main__":
-    print("Embedding notes...")
-    embed_notes()
-    print("Ready!")
+    try:
+        print("Embedding notes...", flush=True)
+        embed_notes()
+        print("Ready!", flush=True)
 
-    port = int(os.environ.get("PORT", 7860))
-    demo.launch(server_port=port, server_name="0.0.0.0")
+        port = int(os.environ.get("PORT", 7860))
+        demo.launch(server_port=port, server_name="0.0.0.0")
+    except Exception as e:
+        print(f"STARTUP ERROR: {e}", flush=True)
+        traceback.print_exc()
+        sys.exit(1)
