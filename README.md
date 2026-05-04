@@ -1,3 +1,14 @@
+---
+title: AskMyNotes
+emoji: 📚
+colorFrom: purple
+colorTo: blue
+sdk: gradio
+sdk_version: 3.50.2
+app_file: app.py
+pinned: false
+---
+
 # AskMyNotes
 
 AskMyNotes lets you chat with your own notes and PDFs using AI. Ask questions in plain English and get answers sourced directly from your documents.
