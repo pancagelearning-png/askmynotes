@@ -1,13 +1,15 @@
 import os
 import glob
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from sentence_transformers import SentenceTransformer
 from pypdf import PdfReader
 import chromadb
+from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
 
 NOTES_DIR = os.path.join(os.path.dirname(__file__), "..", "notes")
 CHROMA_DIR = os.path.join(os.path.dirname(__file__), "..", "chroma_db")
 COLLECTION_NAME = "my_notes"
+
+embedding_fn = DefaultEmbeddingFunction()
 
 
 def read_file(path):
@@ -40,13 +42,12 @@ def main():
         chunks.extend(splits)
         metadatas.extend([{"source": note["source"]}] * len(splits))
 
-    model = SentenceTransformer("all-MiniLM-L6-v2")
-    embeddings = model.encode(chunks).tolist()
-
     client = chromadb.PersistentClient(path=CHROMA_DIR)
-    collection = client.get_or_create_collection(COLLECTION_NAME)
+    collection = client.get_or_create_collection(
+        COLLECTION_NAME, embedding_function=embedding_fn
+    )
     ids = [str(i) for i in range(len(chunks))]
-    collection.add(documents=chunks, embeddings=embeddings, metadatas=metadatas, ids=ids)
+    collection.add(documents=chunks, metadatas=metadatas, ids=ids)
 
     print(f"\nStored {len(chunks)} total chunks in ChromaDB collection '{COLLECTION_NAME}'.")
 

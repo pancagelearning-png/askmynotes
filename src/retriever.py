@@ -1,18 +1,19 @@
 import os
-from sentence_transformers import SentenceTransformer
 import chromadb
+from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
 
 CHROMA_DIR = os.path.join(os.path.dirname(__file__), "..", "chroma_db")
 COLLECTION_NAME = "my_notes"
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
+embedding_fn = DefaultEmbeddingFunction()
 client = chromadb.PersistentClient(path=CHROMA_DIR)
-collection = client.get_or_create_collection(COLLECTION_NAME)
+collection = client.get_or_create_collection(
+    COLLECTION_NAME, embedding_function=embedding_fn
+)
 
 
 def search(query, n_results=3):
-    embedding = model.encode(query).tolist()
-    results = collection.query(query_embeddings=[embedding], n_results=n_results)
+    results = collection.query(query_texts=[query], n_results=n_results)
     hits = []
     for doc, meta in zip(results["documents"][0], results["metadatas"][0]):
         hits.append({"source": meta["source"], "text": doc})
