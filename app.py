@@ -19,12 +19,11 @@ try:
 
     print("Step 5: all imports done", flush=True)
 
-    def chat(message, history):
-        response = answer(message)
-        return response
+    def chat_fn(message, history):
+        return answer(message)
 
     demo = gr.ChatInterface(
-        fn=chat,
+        fn=chat_fn,
         title="AskMyNotes",
         description="Ask questions about your personal notes and PDFs",
     )
