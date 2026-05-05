@@ -34,8 +34,7 @@ try:
         embed_notes()
         print("Step 7: embedding done, launching gradio", flush=True)
 
-        port = int(os.environ.get("PORT", 7860))
-        demo.launch(server_port=port, server_name="0.0.0.0")
+        demo.launch()
 
 except Exception as e:
     print(f"STARTUP ERROR: {e}", flush=True)
